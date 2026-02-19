@@ -14,6 +14,8 @@ class AuditUtils {
       newState: data.newState,
       changes: data.changes || this.calculateChanges(data.previousState, data.newState),
       metadata: {
+        ip: data.ip,
+        userAgent: data.userAgent,
         reason: data.reason,
         source: data.source,
         duration: data.duration,
@@ -23,7 +25,8 @@ class AuditUtils {
       outcome: {
         success: data.success !== false,
         error: data.error,
-        warnings: data.warnings
+        warnings: data.warnings,
+        duration: data.duration
       },
       context: {
         sessionId: data.sessionId,
@@ -162,7 +165,11 @@ class AuditUtils {
           successCount: {
             $sum: { $cond: ['$outcome.success', 1, 0] }
           },
-          avgDuration: { $avg: '$outcome.performance.duration' },
+          avgDuration: {
+            $avg: {
+              $ifNull: ['$outcome.duration', '$outcome.performance.duration']
+            }
+          },
           uniqueUsers: { $addToSet: '$userId' }
         }
       },
@@ -325,7 +332,7 @@ class AuditUtils {
         log.suggestionId?.toString() || '',
         log.outcome.success ? 'success' : 'failed',
         log.outcome.error?.message || '',
-        log.outcome.performance?.duration || ''
+        log.outcome.duration || log.outcome.performance?.duration || ''
       ];
       rows.push(row.join(','));
     });
