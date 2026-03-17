@@ -1,3 +1,5 @@
+const insightSchema = require('./insight.schema');
+
 const integratedAnalysisSchema = {
   type: 'object',
   properties: {

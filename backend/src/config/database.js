@@ -13,8 +13,9 @@ const connectDB = async () => {
     await createIndexes();
 
   } catch (error) {
-    console.error('Database connection error:', error);
-    process.exit(1);
+    console.error('Database connection error:', error.message);
+    console.log('Continuing without database connection...');
+    // process.exit(1); // Comment out to continue without DB
   }
 };
 

@@ -152,7 +152,18 @@ const getCSVTemplate = asyncHandler(async (req, res) => {
   res.setHeader('Content-Disposition', 'attachment; filename=transaction-template.csv');
   res.send(csv);
 });
-
+module.exports = {
+  upload,
+  previewCSV,
+  importCSV,
+  getCSVTemplate,
+  getTransactions,
+  createTransaction,
+  bulkCreateTransactions,
+  getTransaction,
+  updateTransaction,
+  deleteTransaction
+};
 module.exports = {
   // Manual
   createTransaction,
